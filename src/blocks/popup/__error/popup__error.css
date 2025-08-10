@@ -1,9 +1,0 @@
-.popup__error_visible {
-  visibility: visible;
-  opacity: 1;
-  color: rgb(255, 0, 0);
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 100%;
-  letter-spacing: 0%;
-}
