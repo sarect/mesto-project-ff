@@ -1,4 +1,10 @@
-
 @import './vendor/normalize.css';
 @import './vendor/fonts.css';
 @import './pages/index.css';
+
+
+/* Валидация */
+.popup__button_disabled { opacity: 0.5; pointer-events: none; }
+.popup__input_type_error { border-bottom: 1px solid #f00; }
+.popup__error { min-height: 16px; font-size: 12px; line-height: 1.2; color: #f00; opacity: 0; transition: opacity .2s ease; }
+.popup__error_visible { opacity: 1; }

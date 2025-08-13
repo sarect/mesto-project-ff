@@ -7,3 +7,13 @@
 .card__image:hover {
   cursor: pointer;
 }
+
+
+/* fade in card images */
+.card__image {
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.card__image.card__image--ready {
+  opacity: 1;
+}

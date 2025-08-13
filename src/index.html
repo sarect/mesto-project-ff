@@ -1,78 +1,88 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Mesto</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<title>Mesto</title>
 </head>
 <body class="page">
 <div class="page__content">
-  <header class="header page__section">
-    <img src="./images/logo.svg" alt="Логотип проекта масто" class="logo header__logo">
-  </header>
-  <main class="content">
-    <section class="profile page__section">
-      <div class="profile__image" style="background-image: url('./images/avatar.jpg');"></div>
-      <div class="profile__info">
-        <h1 class="profile__title">Жак-Ив Кусто</h1>
-        <button class="profile__edit-button" type="button"></button>
-        <p class="profile__description">Исследователь океана</p>
-      </div>
-      <button class="profile__add-button" type="button"></button>
-    </section>
-    <section class="places page__section">
-      <ul class="places__list">
-      </ul>
-    </section>
-  </main>
-  <footer class="footer page__section">
-    <p class="footer__copyright">
+<header class="header page__section">
+<img alt="Логотип проекта масто" class="logo header__logo" src="./images/logo.svg"/>
+</header>
+<main class="content">
+<section class="profile page__section">
+<div class="profile__image" style="background-image: url('./images/avatar.jpg');"><button aria-label="Редактировать аватар" class="profile__avatar-edit" type="button"></button></div>
+<div class="profile__info">
+<h1 class="profile__title">Жак-Ив Кусто</h1>
+<button class="profile__edit-button" type="button"></button>
+<p class="profile__description">Исследователь океана</p>
+</div>
+<button class="profile__add-button" type="button"></button>
+</section>
+<section class="places page__section">
+<ul class="places__list">
+</ul>
+</section>
+</main>
+<footer class="footer page__section">
+<p class="footer__copyright">
       © 2021 Mesto Russia
     </p>
-  </footer>
-  <div class="popup popup_type_edit">
-    <div class="popup__content">
-      <button type="button" class="popup__close"></button>
-      <h3 class="popup__title">Редактировать профиль</h3>
-      <form class="popup__form" name="edit-profile">
-        <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" required>
-        <input type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" required>
-        <button type="submit" class="button popup__button">Сохранить</button>
-      </form>
-    </div>
-  </div>
-  <div class="popup popup_type_new-card">
-    <div class="popup__content">
-      <button type="button" class="popup__close"></button>
-      <h3 class="popup__title">Новое место</h3>
-      <form class="popup__form" name="new-place">
-        <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required>
-        <input type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
-        <button type="submit" class="button popup__button">Сохранить</button>
-      </form>
-    </div>
-  </div>
-  <div class="popup popup_type_image">
-    <div class="popup__content popup__content_content_image">
-      <button type="button" class="popup__close"></button>
-      <img alt="" alt="" class="popup__image">
-      <p class="popup__caption"></p>
-    </div>
-  </div>
+</footer>
+<div class="popup popup_type_edit">
+<div class="popup__content">
+<button class="popup__close" type="button"></button>
+<h3 class="popup__title">Редактировать профиль</h3>
+<form class="popup__form" name="edit-profile">
+<input class="popup__input popup__input_type_name" id="profile-name" name="name" placeholder="Имя" required="" type="text"/><span class="popup__error" id="profile-name-error"></span>
+<input class="popup__input popup__input_type_description" id="profile-about" name="description" placeholder="Занятие" required="" type="text"/><span class="popup__error" id="profile-about-error"></span>
+<button class="button popup__button" type="submit">Сохранить</button>
+</form>
 </div>
-
+</div>
+<div class="popup popup_type_new-card">
+<div class="popup__content">
+<button class="popup__close" type="button"></button>
+<h3 class="popup__title">Новое место</h3>
+<form class="popup__form" name="new-place">
+<input class="popup__input popup__input_type_card-name" id="place-name" name="place-name" placeholder="Название" required="" type="text"/><span class="popup__error" id="place-name-error"></span>
+<input class="popup__input popup__input_type_url" id="place-link" name="link" placeholder="Ссылка на картинку" required="" type="url"/><span class="popup__error" id="place-link-error"></span>
+<button class="button popup__button" type="submit">Сохранить</button>
+</form>
+</div>
+</div>
+<div class="popup popup_type_image">
+<div class="popup__content popup__content_content_image">
+<button class="popup__close" type="button"></button>
+<img alt="" class="popup__image"/>
+<p class="popup__caption"></p>
+</div>
+</div>
+</div>
 <template id="card-template">
-  <li class="places__item card">
-    <img class="card__image" alt="" />
-    <button type="button" class="card__delete-button"></button>
-    <div class="card__description">
-      <h2 class="card__title">
-      </h2>
-      <button type="button" class="card__like-button"></button>
-    </div>
-  </li>
+<li class="places__item card">
+<img alt="" class="card__image">
+<button class="card__delete-button" type="button"></button>
+<div class="card__description">\n      <span class="card__like-count">0</span>
+<h2 class="card__title">
+</h2>
+<button class="card__like-button" type="button"></button>
+</div>
+</img></li>
 </template>
 </body>
 </html>
+<div class="popup popup_type_avatar">
+<div class="popup__content">
+<button class="popup__close" type="button"></button>
+<h3 class="popup__title">Обновить аватар</h3>
+<form class="popup__form" name="avatar-form" novalidate="">
+<input class="popup__input popup__input_type_avatar-url" id="avatar-url" name="avatar" placeholder="Ссылка на аватар" required="" type="url">
+<span class="popup__error" id="avatar-url-error"></span>
+<button class="popup__button" type="submit">Сохранить</button>
+</input><span class="popup__error" id="avatar-url-error"></span></form>
+</div>
+</div>

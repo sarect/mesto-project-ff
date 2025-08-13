@@ -1,63 +1,153 @@
-
 import './index.css';
 import { openModal, closeModal, setModalCloseHandlers } from './components/modal.js';
-import { createCard, handleLike, handleDelete } from './components/card.js';
-import { initialCards } from './components/initialCards.js';
+import { createCard } from './components/card.js';
+import { enableValidation, clearValidation } from './components/validation.js';
+import { getUser, getInitialCards, updateUser, addCard, updateAvatar } from './components/api.js';
 
+// DOM
 const cardsContainer = document.querySelector('.places__list');
-const addCardButton = document.querySelector('.profile__add-button');
-const editButton = document.querySelector('.profile__edit-button');
 
+// Popups
 const editPopup = document.querySelector('.popup_type_edit');
-const editForm = editPopup.querySelector('.popup__form');
-const nameInput = editForm.querySelector('.popup__input_type_name');
-const descInput = editForm.querySelector('.popup__input_type_description');
-
-const profileTitle = document.querySelector('.profile__title');
-const profileDesc = document.querySelector('.profile__description');
-
-const newCardPopup = document.querySelector('.popup_type_new-card');
-const newCardForm = newCardPopup.querySelector('.popup__form');
-const inputCardName = newCardForm.querySelector('.popup__input_type_card-name');
-const inputCardLink = newCardForm.querySelector('.popup__input_type_url');
-
+const addPopup = document.querySelector('.popup_type_new-card');
+const avatarPopup = document.querySelector('.popup_type_avatar');
 const imagePopup = document.querySelector('.popup_type_image');
-const popupImage = imagePopup.querySelector('.popup__image');
-const popupCaption = imagePopup.querySelector('.popup__caption');
 
-function handlePreview(name, link) {
-  popupImage.src = link;
-  popupImage.alt = name;
-  popupCaption.textContent = name;
-  openModal(imagePopup);
-}
+// Forms
+const editForm = editPopup?.querySelector('.popup__form');
+const addForm = addPopup?.querySelector('.popup__form');
+const avatarForm = avatarPopup?.querySelector('.popup__form');
 
-editButton.addEventListener('click', () => {
-  nameInput.value = profileTitle.textContent;
-  descInput.value = profileDesc.textContent;
+// Inputs
+const nameInput = editForm?.querySelector('.popup__input_type_name');
+const aboutInput = editForm?.querySelector('.popup__input_type_description');
+const placeNameInput = addForm?.querySelector('.popup__input_type_card-name');
+const placeLinkInput = addForm?.querySelector('.popup__input_type_url');
+const avatarLinkInput = avatarForm?.querySelector('.popup__input_type_avatar-url');
+
+// Profile elements
+const profileName = document.querySelector('.profile__title');
+const profileAbout = document.querySelector('.profile__description');
+const profileAvatar = document.querySelector('.profile__image');
+
+// Buttons
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
+const avatarEditButton = document.querySelector('.profile__avatar-edit');
+
+let currentUserId = null;
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
+// Set patterns and custom messages dynamically to avoid relying on markup
+const nameLikePattern = '^[A-Za-zА-Яа-яЁё\\-\\s]+$';
+[nameInput, aboutInput, placeNameInput].forEach((inp) => {
+  if (!inp) return;
+  inp.setAttribute('pattern', nameLikePattern);
+  inp.dataset.errorPattern = 'Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы';
+});
+
+
+// Helpers
+const renderCard = (data, toStart = false) => {
+  const card = createCard(data, currentUserId, {
+    onPreview: (name, link) => {
+      const img = imagePopup.querySelector('.popup__image');
+      const cap = imagePopup.querySelector('.popup__caption');
+      img.src = link;
+      img.alt = name;
+      cap.textContent = name;
+      openModal(imagePopup);
+    }
+  });
+  toStart ? cardsContainer.prepend(card) : cardsContainer.append(card);
+};
+
+const setLoading = (button, text) => {
+  if (!button) return ({});
+  const original = button.textContent;
+  button.textContent = text;
+  return { restore: () => (button.textContent = original) };
+};
+
+// Openers
+editButton?.addEventListener('click', () => {
+  nameInput.value = profileName.textContent;
+  aboutInput.value = profileAbout.textContent;
+  clearValidation(editForm, validationConfig);
   openModal(editPopup);
 });
+addButton?.addEventListener('click', () => {
+  addForm.reset();
+  clearValidation(addForm, validationConfig);
+  openModal(addPopup);
+});
+avatarEditButton?.addEventListener('click', () => {
+  avatarForm.reset();
+  clearValidation(avatarForm, validationConfig);
+  openModal(avatarPopup);
+});
 
-addCardButton.addEventListener('click', () => openModal(newCardPopup));
-
-editForm.addEventListener('submit', (evt) => {
+// Submits
+editForm?.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  profileTitle.textContent = nameInput.value.trim();
-  profileDesc.textContent = descInput.value.trim();
-  closeModal(editPopup);
+  const btn = editForm.querySelector(validationConfig.submitButtonSelector);
+  const loader = setLoading(btn, 'Сохранение...');
+  updateUser({ name: nameInput.value.trim(), about: aboutInput.value.trim() })
+    .then((user) => {
+      profileName.textContent = user.name;
+      profileAbout.textContent = user.about;
+      closeModal(editPopup);
+    })
+    .catch(console.error)
+    .finally(loader.restore);
 });
 
-newCardForm.addEventListener('submit', (evt) => {
+addForm?.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const card = createCard({ name: inputCardName.value.trim(), link: inputCardLink.value.trim() }, handleLike, handleDelete, handlePreview);
-  cardsContainer.prepend(card);
-  newCardForm.reset();
-  closeModal(newCardPopup);
+  const btn = addForm.querySelector(validationConfig.submitButtonSelector);
+  const loader = setLoading(btn, 'Сохранение...');
+  addCard({ name: placeNameInput.value.trim(), link: placeLinkInput.value.trim() })
+    .then((card) => {
+      renderCard(card, true);
+      addForm.reset();
+      clearValidation(addForm, validationConfig);
+      closeModal(addPopup);
+    })
+    .catch(console.error)
+    .finally(loader.restore);
 });
 
-initialCards.forEach((item) => {
-  const card = createCard(item, handleLike, handleDelete, handlePreview);
-  cardsContainer.append(card);
+avatarForm?.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const btn = avatarForm.querySelector(validationConfig.submitButtonSelector);
+  const loader = setLoading(btn, 'Сохранение...');
+  updateAvatar(avatarLinkInput.value.trim())
+    .then((user) => {
+      profileAvatar.style.backgroundImage = `url(${user.avatar})`;
+      closeModal(avatarPopup);
+    })
+    .catch(console.error)
+    .finally(loader.restore);
 });
 
+// Init
+Promise.all([getUser(), getInitialCards()])
+  .then(([user, cards]) => {
+    currentUserId = user._id;
+    profileName.textContent = user.name;
+    profileAbout.textContent = user.about;
+    if (user.avatar) profileAvatar.style.backgroundImage = `url(${user.avatar})`;
+    cards.reverse().forEach(renderCard); // старые вниз, новые вверх
+  })
+  .catch(console.error);
+
+enableValidation(validationConfig);
 setModalCloseHandlers();

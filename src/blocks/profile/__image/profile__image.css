@@ -20,3 +20,42 @@
     margin-right: 0;
   }
 }
+
+/* Hover overlay & edit icon */
+.profile__image {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile__image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.profile__avatar-edit {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: transparent url('../../../images/edit-icon.svg') center no-repeat;
+  background-size: 26px 26px;
+  opacity: 0;
+  transition: opacity .2s ease;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.profile__image:hover::before,
+.profile__image:focus-within::before {
+  opacity: 1;
+}
+
+.profile__image:hover .profile__avatar-edit,
+.profile__image:focus-within .profile__avatar-edit {
+  opacity: 1;
+}
