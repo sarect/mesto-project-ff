@@ -1,31 +1,21 @@
-// src/components/validation.js (rev2)
-// Включение валидации всех форм и утилита очистки ошибок
-// Создаём элементы ошибок динамически, если их нет в разметке
+// Функции валидации — все селекторы и классы берём из config
 
-const ensureErrorElement = (form, input, config) => {
-  // ищем подходящий спан рядом или по id
-  let errorEl = input.nextElementSibling;
-  if (!(errorEl && errorEl.classList && errorEl.classList.contains('popup__error'))) {
-    errorEl = form.querySelector(`#${input.id || input.name}-error`);
-  }
-  if (!errorEl) {
-    errorEl = document.createElement('span');
-    errorEl.className = 'popup__error';
-    errorEl.id = `${input.id || input.name}-error`;
-    input.insertAdjacentElement('afterend', errorEl);
-  }
-  return errorEl;
+const getErrorElement = (form, input, config) => {
+  if (!input.id) return null;
+  return form.querySelector(`#${input.id}${config.errorSuffix || '-error'}`);
 };
 
 const showError = (form, input, config) => {
-  const errorEl = ensureErrorElement(form, input, config);
+  const errorEl = getErrorElement(form, input, config);
+  if (!errorEl) return;
   errorEl.textContent = input.validationMessage;
   input.classList.add(config.inputErrorClass);
   errorEl.classList.add(config.errorClass);
 };
 
 const hideError = (form, input, config) => {
-  const errorEl = ensureErrorElement(form, input, config);
+  const errorEl = getErrorElement(form, input, config);
+  if (!errorEl) return;
   errorEl.textContent = '';
   input.classList.remove(config.inputErrorClass);
   errorEl.classList.remove(config.errorClass);
@@ -75,7 +65,6 @@ const setEventListeners = (form, config) => {
 export const enableValidation = (config) => {
   const forms = Array.from(document.querySelectorAll(config.formSelector));
   forms.forEach((form) => {
-    // включаем novalidate на всякий случай, управление берём на себя
     form.setAttribute('novalidate', 'novalidate');
     setEventListeners(form, config);
   });

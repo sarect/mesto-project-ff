@@ -13,6 +13,19 @@ const addPopup = document.querySelector('.popup_type_new-card');
 const avatarPopup = document.querySelector('.popup_type_avatar');
 const imagePopup = document.querySelector('.popup_type_image');
 
+// Cached elements of image preview popup
+const previewImage = imagePopup?.querySelector('.popup__image');
+const previewCaption = imagePopup?.querySelector('.popup__caption');
+
+function handlePreview(name, link) {
+  if (!previewImage || !previewCaption) return;
+  previewImage.src = link;
+  previewImage.alt = name;
+  previewCaption.textContent = name;
+  openModal(imagePopup);
+}
+
+
 // Forms
 const editForm = editPopup?.querySelector('.popup__form');
 const addForm = addPopup?.querySelector('.popup__form');
@@ -43,7 +56,8 @@ const validationConfig = {
   submitButtonSelector: '.popup__button',
   inactiveButtonClass: 'popup__button_disabled',
   inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
+  errorClass: 'popup__error_visible',
+  errorSuffix: '-error'
 };
 
 // Set patterns and custom messages dynamically to avoid relying on markup
@@ -57,16 +71,7 @@ const nameLikePattern = '^[A-Za-zА-Яа-яЁё\\-\\s]+$';
 
 // Helpers
 const renderCard = (data, toStart = false) => {
-  const card = createCard(data, currentUserId, {
-    onPreview: (name, link) => {
-      const img = imagePopup.querySelector('.popup__image');
-      const cap = imagePopup.querySelector('.popup__caption');
-      img.src = link;
-      img.alt = name;
-      cap.textContent = name;
-      openModal(imagePopup);
-    }
-  });
+  const card = createCard(data, currentUserId, { onPreview: handlePreview });
   toStart ? cardsContainer.prepend(card) : cardsContainer.append(card);
 };
 

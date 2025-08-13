@@ -32,29 +32,29 @@
       © 2021 Mesto Russia
     </p>
 </footer>
-<div class="popup popup_type_edit">
+<div class="popup popup_type_edit popup_soft">
 <div class="popup__content">
 <button class="popup__close" type="button"></button>
 <h3 class="popup__title">Редактировать профиль</h3>
 <form class="popup__form" name="edit-profile">
-<input class="popup__input popup__input_type_name" id="profile-name" name="name" placeholder="Имя" required="" type="text"/><span class="popup__error" id="profile-name-error"></span>
-<input class="popup__input popup__input_type_description" id="profile-about" name="description" placeholder="Занятие" required="" type="text"/><span class="popup__error" id="profile-about-error"></span>
+<input class="popup__input popup__input_type_name" data-error-pattern="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" id="profile-name" maxlength="40" minlength="2" name="name" pattern="^[A-Za-zА-Яа-яЁё\-\s]+$" placeholder="Имя" required="" type="text"/><span class="popup__error" id="profile-name-error"></span>
+<input class="popup__input popup__input_type_description" data-error-pattern="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" id="profile-about" maxlength="200" minlength="2" name="description" pattern="^[A-Za-zА-Яа-яЁё\-\s]+$" placeholder="Занятие" required="" type="text"/><span class="popup__error" id="profile-about-error"></span>
 <button class="button popup__button" type="submit">Сохранить</button>
 </form>
 </div>
 </div>
-<div class="popup popup_type_new-card">
+<div class="popup popup_type_new-card popup_soft">
 <div class="popup__content">
 <button class="popup__close" type="button"></button>
 <h3 class="popup__title">Новое место</h3>
 <form class="popup__form" name="new-place">
-<input class="popup__input popup__input_type_card-name" id="place-name" name="place-name" placeholder="Название" required="" type="text"/><span class="popup__error" id="place-name-error"></span>
+<input class="popup__input popup__input_type_card-name" data-error-pattern="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" id="place-name" maxlength="30" minlength="2" name="place-name" pattern="^[A-Za-zА-Яа-яЁё\-\s]+$" placeholder="Название" required="" type="text"/><span class="popup__error" id="place-name-error"></span>
 <input class="popup__input popup__input_type_url" id="place-link" name="link" placeholder="Ссылка на картинку" required="" type="url"/><span class="popup__error" id="place-link-error"></span>
 <button class="button popup__button" type="submit">Сохранить</button>
 </form>
 </div>
 </div>
-<div class="popup popup_type_image">
+<div class="popup popup_type_image popup_soft">
 <div class="popup__content popup__content_content_image">
 <button class="popup__close" type="button"></button>
 <img alt="" class="popup__image"/>
@@ -64,25 +64,25 @@
 </div>
 <template id="card-template">
 <li class="places__item card">
-<img alt="" class="card__image">
+<img alt="" class="card__image"/>
 <button class="card__delete-button" type="button"></button>
 <div class="card__description">\n      <span class="card__like-count">0</span>
 <h2 class="card__title">
 </h2>
 <button class="card__like-button" type="button"></button>
 </div>
-</img></li>
+</li>
 </template>
 </body>
 </html>
-<div class="popup popup_type_avatar">
+<div class="popup popup_type_avatar popup_soft">
 <div class="popup__content">
 <button class="popup__close" type="button"></button>
 <h3 class="popup__title">Обновить аватар</h3>
 <form class="popup__form" name="avatar-form" novalidate="">
-<input class="popup__input popup__input_type_avatar-url" id="avatar-url" name="avatar" placeholder="Ссылка на аватар" required="" type="url">
+<input class="popup__input popup__input_type_avatar-url" id="avatar-url" name="avatar" placeholder="Ссылка на аватар" required="" type="url"/>
 <span class="popup__error" id="avatar-url-error"></span>
 <button class="popup__button" type="submit">Сохранить</button>
-</input><span class="popup__error" id="avatar-url-error"></span></form>
+<span class="popup__error" id="avatar-url-error"></span></form>
 </div>
 </div>
